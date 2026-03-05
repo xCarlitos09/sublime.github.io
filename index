@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sublimé Studio | Catálogo Exclusivo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* DISEÑO PROFESIONAL MINIMALISTA */
+        :root {
+            --primary-color: #ffffff;
+            --bg-color: #0b0b0b;
+            --card-bg: #1a1a1a;
+            --accent: #d4af37; /* Oro sutil para detalles */
+            --text-muted: #888;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            position: sticky;
+            top: 0;
+            background: rgba(11, 11, 11, 0.95);
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        /* CATÁLOGO */
+        .catalog {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .product-price {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .btn-add {
+            width: 100%;
+            padding: 0.8rem;
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .btn-add:hover {
+            background: white;
+            color: black;
+        }
+
+        /* CARRITO FLOTANTE */
+        .cart-icon {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--accent);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: white;
+            color: black;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* MODAL CARRITO */
+        #cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-content {
+            background: #111;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #333;
+            padding: 1rem 0;
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Sublimé Studio</div>
+    </header>
+
+    <div class="catalog" id="catalog">
+        <div class="product-card">
+            <img src="https://via.placeholder.com/400x500" class="product-image" alt="Prenda">
+            <div class="product-info">
+                <h3 class="product-title">Camiseta "Gato Abstracto"</h3>
+                <p class="product-price">$20.00</p>
+                <button class="btn-add" onclick="addToCart('Camiseta Gato Abstracto', 20)">Añadir al carrito</button>
+            </div>
+        </div>
+        </div>
+
+    <div class="cart-icon" onclick="toggleCart()">
+        <i class="fas fa-shopping-bag"></i>
+        <div class="cart-count" id="cart-count">0</div>
+    </div>
+
+    <div id="cart-modal">
+        <div class="cart-content">
+            <h2>Tu Pedido</h2>
+            <div id="cart-items"></div>
+            <hr style="border: 0.5px solid #333;">
+            <p>Total: $<span id="cart-total">0</span></p>
+            <button class="btn-whatsapp" onclick="sendToWhatsApp()">
+                <i class="fab fa-whatsapp"></i> Finalizar por WhatsApp
+            </button>
+            <button onclick="toggleCart()" style="background:none; border:none; color:#888; width:100%; margin-top:10px; cursor:pointer;">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        const phoneNumber = "584120000000"; // ¡CAMBIA ESTO POR TU NÚMERO!
+
+        function addToCart(name, price) {
+            cart.push({name, price});
+            updateCart();
+        }
+
+        function updateCart() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const itemsDiv = document.getElementById('cart-items');
+            const totalSpan = document.getElementById('cart-total');
+            
+            itemsDiv.innerHTML = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                total += item.price;
+                itemsDiv.innerHTML += `
+                    <div class="cart-item">
+                        <span>${item.name}</span>
+                        <span>$${item.price} <i class="fas fa-trash" onclick="removeItem(${index})" style="margin-left:10px; cursor:pointer; color:#ff4444;"></i></span>
+                    </div>
+                `;
+            });
+            totalSpan.innerText = total.toFixed(2);
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function toggleCart() {
+            const modal = document.getElementById('cart-modal');
+            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function sendToWhatsApp() {
+            if (cart.length === 0) return alert("El carrito está vacío");
+
+            let message = "¡Hola Sublimé Studio! 👋 Me gustaría encargar los siguientes productos:\n\n";
+            cart.forEach(item => {
+                message += `• ${item.name} - $${item.price}\n`;
+            });
+            message += `\n*Total: $${document.getElementById('cart-total').innerText}*`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`);
+        }
+    </script>
+</body>
+</html>
